@@ -1,0 +1,44 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Build') {
+            steps {
+                // Checkout source code from a version control system (e.g., Git)
+                git 'https://github.com/your-username/your-repo.git'
+
+                // Example: Run a shell command to build your project
+                sh 'mvn clean package' // Replace with your build command
+            }
+        }
+
+        stage('Test') {
+            steps {
+                // Example: Run tests after the build
+                sh 'mvn test' // Replace with your test command
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                // Example: Deploy the built artifact (if applicable)
+                sh 'scp target/your-application.jar user@your-server:/path/to/deployment' // Replace with your deployment command
+            }
+        }
+    }
+
+    post {
+        always {
+            // Example: Send notifications or perform cleanup actions
+            echo 'Build finished'
+        }
+        success {
+            // Actions to perform when the build succeeds
+            echo 'Build succeeded! Deploying...'
+        }
+        failure {
+            // Actions to perform when the build fails
+            echo 'Build failed!'
+        }
+    }
+}
